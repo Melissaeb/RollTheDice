@@ -92,7 +92,7 @@ struct DiceView: View {
                     if value > 0 {
                         Text("\(number)")
                             .fontWeight(.heavy)
-                            .frame(width: 32, height: 32)
+                            .frame(width: 40, height: 40)
                             .background(Color.purple)
                             .clipShape(Circle())
                             .foregroundStyle(.white)
