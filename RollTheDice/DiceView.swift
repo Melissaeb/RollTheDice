@@ -5,8 +5,6 @@
 //  Created by Melissa Elliston-Boyes on 10/07/2025.
 //
 
-// TODO: Make +/- buttons bigger
-
 import SwiftUI
 
 struct DiceView: View {
