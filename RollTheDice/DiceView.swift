@@ -28,7 +28,7 @@ struct DiceView: View {
                     .padding(0)
                 VStack {
                     Button {
-                        if totalDice < 5 {
+                        if totalDice < range.upperBound {
                             totalDice += 1
                             diceRolled = false
                         }
