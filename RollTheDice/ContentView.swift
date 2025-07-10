@@ -90,7 +90,6 @@ struct ContentView: View {
                 .padding(.top, 16)
             }
             .navigationTitle("Roll the Dice")
-            .accessibilityLabel("Roll the Dice Application")
         }
     }
     
