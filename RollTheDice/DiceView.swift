@@ -26,6 +26,7 @@ struct DiceView: View {
                     .background(RoundedRectangle(cornerRadius: 4)
                         .fill(Color.red))
                     .padding(0)
+                
                 VStack {
                     Button {
                         if totalDice < range.upperBound {
@@ -37,11 +38,12 @@ struct DiceView: View {
                             .resizable()
                             .frame(width: 12, height: 12)
                             .foregroundColor(totalDice < range.upperBound ? .primary.opacity(0.9) : .gray)
-                            .frame(width: 20, height: 20)
+                            .frame(width: 24, height: 24)
                             .background(Color.secondary.opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
                     .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: totalDice)
+                    
                     Button {
                         if totalDice > range.lowerBound {
                             totalDice -= 1
@@ -52,7 +54,7 @@ struct DiceView: View {
                             .resizable()
                             .frame(width: 12, height: 1.5)
                             .foregroundColor(totalDice > range.lowerBound ? .primary.opacity(0.9) : .gray)
-                            .frame(width: 20, height: 20)
+                            .frame(width: 24, height: 24)
                             .background(Color.secondary.opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
