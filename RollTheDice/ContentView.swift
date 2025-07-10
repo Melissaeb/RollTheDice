@@ -89,7 +89,7 @@ struct ContentView: View {
     }
     
     private func rollDice() async {
-        let delays: [Double] = [0.02, 0.04, 0.06, 0.08, 0.1, 0.15, 0.2, 0.3, 0.5]
+        let delays: [Double] = [0.02, 0.04, 0.06, 0.08, 0.1, 0.15, 0.2, 0.3]
 
         setDiceRolls()
         for delay in delays {
