@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+// TODO: Add SwiftData to store previous rolls
+// TODO: Have sheet slide in from the side with previous rolls
+// TODO: Add accessibility elements
+
 struct ContentView: View {
     @State private var diceRolled: Bool = false
     private let range: ClosedRange<Int> = 0...5
