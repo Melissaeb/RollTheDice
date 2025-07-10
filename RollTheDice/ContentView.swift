@@ -26,8 +26,15 @@ struct ContentView: View {
     @State private var d12Rolls: [Int] = []
     @State private var d20Rolls: [Int] = []
     @State private var d100Rolls: [Int] = []
+    
     private var total: Int {
-        d4Rolls.reduce(0, +) + d6Rolls.reduce(0, +) + d8Rolls.reduce(0, +) + d10Rolls.reduce(0, +) + d12Rolls.reduce(0, +) + d20Rolls.reduce(0, +) + d100Rolls.reduce(0, +)
+        d4Rolls.reduce(0, +) +
+        d6Rolls.reduce(0, +) +
+        d8Rolls.reduce(0, +) +
+        d10Rolls.reduce(0, +) +
+        d12Rolls.reduce(0, +) +
+        d20Rolls.reduce(0, +) +
+        d100Rolls.reduce(0, +)
     }
     @State private var savedTotal: Int = 0
     
