@@ -9,7 +9,7 @@ import SwiftUI
 
 // TODO: Add SwiftData to store previous rolls
 // TODO: Have sheet slide in from the side with previous rolls
-// TODO: Add accessibility elements
+// TODO: Add accessibility elements for sheet
 
 struct DieType: Identifiable {
     let id = UUID()
