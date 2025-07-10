@@ -37,14 +37,24 @@ struct ContentView: View {
                 DiceView(number: 20, totalDice: $totalD20s, range: range, diceRolls: $d20Rolls, diceRolled: $diceRolled)
                 DiceView(number: 100, totalDice: $totalD100s, range: range, diceRolls: $d100Rolls, diceRolled: $diceRolled)
                 
-                HStack(spacing: 40) {
+                HStack {
                     Button("ROLL", action: rollDice)
                         .frame(width: 120, height: 40)
                         .background(Color.blue)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .fontWeight(.heavy)
                         .foregroundStyle(.white)
-                    Text("Total: \(d4Rolls.reduce(0, +) + d6Rolls.reduce(0, +) + d8Rolls.reduce(0, +) + d10Rolls.reduce(0, +) + d12Rolls.reduce(0, +) + d20Rolls.reduce(0, +) + d100Rolls.reduce(0, +))")
+                        .padding(.trailing, 56)
+                    Text("Total: ")
+                        .font(.title)
+                        .frame(width: 70)
+                    Text("\(total)")
+                        .font(.title)
+                        .fontWeight(.heavy)
+                        .frame(width: 70, height: 40)
+                        .background(Color.pink)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .padding(.bottom, 24)
             }
