@@ -5,13 +5,10 @@
 //  Created by Melissa Elliston-Boyes on 08/07/2025.
 //
 
+import SwiftData
 import SwiftUI
 
-// TODO: Add SwiftData to store previous rolls
-// TODO: Have sheet slide in from the side with previous rolls
-// TODO: Add accessibility elements for sheet
-
-struct DieType: Identifiable {
+struct DieType: Identifiable, Codable {
     let id = UUID()
     let sides: Int
     var count: Int
@@ -19,24 +16,25 @@ struct DieType: Identifiable {
 }
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query var diceHistoryRecords: [DiceHistory]
+    @Query var lastChosenDiceRecords: [LastChosenDice]
+    
     @State private var diceRolled: Bool = false
     private let range: ClosedRange<Int> = 0...5
     
-    @State private var diceData: [DieType] = [
-        DieType(sides: 4, count: 0, rolls: []),
-        DieType(sides: 6, count: 0, rolls: []),
-        DieType(sides: 8, count: 0, rolls: []),
-        DieType(sides: 10, count: 0, rolls: []),
-        DieType(sides: 12, count: 0, rolls: []),
-        DieType(sides: 20, count: 0, rolls: []),
-        DieType(sides: 100, count: 0, rolls: [])
-    ]
+    @State private var diceData: [DieType]
     
     private var total: Int {
         diceData.flatMap { $0.rolls }.reduce(0, +)
     }
     
     @State private var savedTotal: Int = 0
+    @State private var showingHistorySheet: Bool = false
+    
+    init() {
+        _diceData = State(initialValue: [])
+    }
     
     var body: some View {
         NavigationStack {
@@ -90,6 +88,54 @@ struct ContentView: View {
                 .padding(.top, 16)
             }
             .navigationTitle("Roll the Dice")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingHistorySheet = true
+                    } label: {
+                        Label("Show History", systemImage: "list.bullet.clipboard.fill")
+                    }
+                    .accessibilityLabel("View Roll History")
+                    .accessibilityHint("Opens a sheet displaying all previous dice roll totals.")
+                }
+            }
+            .sheet(isPresented: $showingHistorySheet) {
+                RollHistoryView(diceHistory: diceHistoryRecords.first ?? DiceHistory())
+            }
+        }
+        .onAppear {
+            loadInitialDiceData()
+        }
+    }
+    
+    private func loadInitialDiceData() {
+        
+        let defaultDiceTypes: [DieType] = [
+            DieType(sides: 4, count: 0, rolls: []),
+            DieType(sides: 6, count: 0, rolls: []),
+            DieType(sides: 8, count: 0, rolls: []),
+            DieType(sides: 10, count: 0, rolls: []),
+            DieType(sides: 12, count: 0, rolls: []),
+            DieType(sides: 20, count: 0, rolls: []),
+            DieType(sides: 100, count: 0, rolls: [])
+        ]
+        
+        if let lastChosen = lastChosenDiceRecords.first {
+            var loadedDiceData: [DieType] = []
+            for (sides, count) in lastChosen.chosenDiceCounts {
+                loadedDiceData.append(DieType(sides: sides, count: count, rolls: []))
+            }
+            
+            loadedDiceData.sort { $0.sides < $1.sides }
+            var mergedDiceData = defaultDiceTypes
+            for i in mergedDiceData.indices {
+                if let loadedDie = loadedDiceData.first(where: { $0.sides == mergedDiceData[i].sides }) {
+                    mergedDiceData[i].count = loadedDie.count
+                }
+            }
+            diceData = mergedDiceData
+        } else {
+            diceData = defaultDiceTypes
         }
     }
     
@@ -102,6 +148,34 @@ struct ContentView: View {
             setDiceRolls()
         }
         savedTotal = total
+        
+        let newRoll = DiceRoll(total: savedTotal, timeStamp: Date())
+                if let history = diceHistoryRecords.first {
+                    history.rolls.append(newRoll)
+                } else {
+                    let newHistory = DiceHistory(rolls: [newRoll])
+                    modelContext.insert(newHistory)
+                }
+
+                var currentChosenDice: [Int: Int] = [:]
+                for die in diceData {
+                    currentChosenDice[die.sides] = die.count
+                }
+
+                if let lastChosen = lastChosenDiceRecords.first {
+                    lastChosen.chosenDiceCounts = currentChosenDice
+                } else {
+                    let newLastChosen = LastChosenDice(chosenDiceCounts: currentChosenDice)
+                    modelContext.insert(newLastChosen)
+                }
+
+                do {
+                    try modelContext.save()
+                    print("Successfully saved roll and chosen dice to SwiftData.")
+                } catch {
+                    print("Failed to save to SwiftData: \(error.localizedDescription)")
+                }
+        
         UIAccessibility.post(notification: .announcement, argument: "Dice rolled. New total is \(total).")
     }
     
