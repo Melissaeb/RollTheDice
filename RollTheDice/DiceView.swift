@@ -30,7 +30,6 @@ struct DiceView: View {
                     Button {
                         if totalDice < range.upperBound {
                             totalDice += 1
-                            diceRolled = false
                         }
                     } label: {
                         Image(systemName: "plus")
@@ -48,7 +47,6 @@ struct DiceView: View {
                     Button {
                         if totalDice > range.lowerBound {
                             totalDice -= 1
-                            diceRolled = false
                         }
                     } label: {
                         Image(systemName: "minus")
