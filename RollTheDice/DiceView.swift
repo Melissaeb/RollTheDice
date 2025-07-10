@@ -24,6 +24,7 @@ struct DiceView: View {
                     .background(RoundedRectangle(cornerRadius: 4)
                         .fill(Color.red))
                     .padding(0)
+                    .accessibilityLabel("\(number)-sided dice")
                 
                 VStack {
                     Button {
@@ -41,6 +42,8 @@ struct DiceView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
                     .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: totalDice)
+                    .accessibilityLabel("Add D\(number) dice. You have \(totalDice) D\(number) dice.")
+                    .accessibilityHint("Increments the count of D\(number) dice up to a limit of \(range.upperBound).")
                     
                     Button {
                         if totalDice > range.lowerBound {
@@ -57,6 +60,8 @@ struct DiceView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
                     .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: totalDice)
+                    .accessibilityLabel("Subtract D\(number) dice. You have \(totalDice) D\(number) dice.")
+                    .accessibilityHint("Decrements the count of D\(number) dice down to a limit of \(range.lowerBound).")
                 }
             }
             .padding(.leading)
@@ -71,6 +76,8 @@ struct DiceView: View {
                         .foregroundStyle(.white)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("You have \(totalDice) D\(number) dice.")
             .frame(maxWidth: .infinity)
             .padding(.trailing)
         }

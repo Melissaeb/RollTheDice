@@ -67,11 +67,14 @@ struct ContentView: View {
                                 .padding(.trailing, 56)
                         }
                         .sensoryFeedback(.impact(weight: .heavy, intensity: 1), trigger: total)
-                        
+                        .accessibilityLabel("Roll Dice")
+                        .accessibilityHint("Activates the dice roll and updates the total.")
                         
                         Text("Total: ")
                             .font(.title)
                             .frame(width: 70)
+                            .accessibilityHidden(true)
+                        
                         Text("\(total)")
                             .font(.title)
                             .fontWeight(.heavy)
@@ -79,12 +82,15 @@ struct ContentView: View {
                             .background(Color.pink)
                             .foregroundStyle(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("Current total")
+                            .accessibilityValue("\(total)")
                     }
                     .padding(.bottom, 24)
                 }
                 .padding(.top, 16)
             }
             .navigationTitle("Roll the Dice")
+            .accessibilityLabel("Roll the Dice Application")
         }
     }
     
@@ -97,6 +103,7 @@ struct ContentView: View {
             setDiceRolls()
         }
         savedTotal = total
+        UIAccessibility.post(notification: .announcement, argument: "Dice rolled. New total is \(total).")
     }
     
     private func setDiceRolls() {
