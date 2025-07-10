@@ -6,13 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		97D9630B2E206C100052D4E5 /* RollHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D9630A2E206C100052D4E5 /* RollHistoryView.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		97C3B32B2E1C517100CC9AB6 /* RollTheDice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RollTheDice.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		97D9630A2E206C100052D4E5 /* RollHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollHistoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +32,6 @@
 		97C3B3222E1C517100CC9AB6 = {
 			isa = PBXGroup;
 			children = (
-				97D9630A2E206C100052D4E5 /* RollHistoryView.swift */,
 				97C3B32D2E1C517100CC9AB6 /* RollTheDice */,
 				97C3B32C2E1C517100CC9AB6 /* Products */,
 			);
@@ -125,7 +119,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97D9630B2E206C100052D4E5 /* RollHistoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
