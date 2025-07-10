@@ -11,47 +11,45 @@ import SwiftUI
 // TODO: Have sheet slide in from the side with previous rolls
 // TODO: Add accessibility elements
 
+struct DieType: Identifiable {
+    let id = UUID()
+    let sides: Int
+    var count: Int
+    var rolls: [Int]
+}
+
 struct ContentView: View {
     @State private var diceRolled: Bool = false
     private let range: ClosedRange<Int> = 0...5
     
-    @State private var totalD4s: Int = 0
-    @State private var totalD6s: Int = 0
-    @State private var totalD8s: Int = 0
-    @State private var totalD10s: Int = 0
-    @State private var totalD12s: Int = 0
-    @State private var totalD20s: Int = 0
-    @State private var totalD100s: Int = 0
-    
-    @State private var d4Rolls: [Int] = []
-    @State private var d6Rolls: [Int] = []
-    @State private var d8Rolls: [Int] = []
-    @State private var d10Rolls: [Int] = []
-    @State private var d12Rolls: [Int] = []
-    @State private var d20Rolls: [Int] = []
-    @State private var d100Rolls: [Int] = []
+    @State private var diceData: [DieType] = [
+        DieType(sides: 4, count: 0, rolls: []),
+        DieType(sides: 6, count: 0, rolls: []),
+        DieType(sides: 8, count: 0, rolls: []),
+        DieType(sides: 10, count: 0, rolls: []),
+        DieType(sides: 12, count: 0, rolls: []),
+        DieType(sides: 20, count: 0, rolls: []),
+        DieType(sides: 100, count: 0, rolls: [])
+    ]
     
     private var total: Int {
-        d4Rolls.reduce(0, +) +
-        d6Rolls.reduce(0, +) +
-        d8Rolls.reduce(0, +) +
-        d10Rolls.reduce(0, +) +
-        d12Rolls.reduce(0, +) +
-        d20Rolls.reduce(0, +) +
-        d100Rolls.reduce(0, +)
+        diceData.flatMap { $0.rolls }.reduce(0, +)
     }
+    
     @State private var savedTotal: Int = 0
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                DiceView(number: 4, totalDice: $totalD4s, range: range, diceRolls: $d4Rolls, diceRolled: $diceRolled)
-                DiceView(number: 6, totalDice: $totalD6s, range: range, diceRolls: $d6Rolls, diceRolled: $diceRolled)
-                DiceView(number: 8, totalDice: $totalD8s, range: range, diceRolls: $d8Rolls, diceRolled: $diceRolled)
-                DiceView(number: 10, totalDice: $totalD10s, range: range, diceRolls: $d10Rolls, diceRolled: $diceRolled)
-                DiceView(number: 12, totalDice: $totalD12s, range: range, diceRolls: $d12Rolls, diceRolled: $diceRolled)
-                DiceView(number: 20, totalDice: $totalD20s, range: range, diceRolls: $d20Rolls, diceRolled: $diceRolled)
-                DiceView(number: 100, totalDice: $totalD100s, range: range, diceRolls: $d100Rolls, diceRolled: $diceRolled)
+                ForEach($diceData) { $dieType in
+                    DiceView(
+                        number: 4,
+                        totalDice: $dieType.count,
+                        range: range,
+                        diceRolls: $dieType.rolls,
+                        diceRolled: $diceRolled
+                    )
+                }
                 
                 HStack {
                     Button {
@@ -100,30 +98,18 @@ struct ContentView: View {
     }
     
     private func setDiceRolls() {
-        rollSpecificDie(count: totalD4s, sides: 4, into: &d4Rolls)
-        rollSpecificDie(count: totalD6s, sides: 6, into: &d6Rolls)
-        rollSpecificDie(count: totalD8s, sides: 8, into: &d8Rolls)
-        rollSpecificDie(count: totalD10s, sides: 10, into: &d10Rolls)
-        rollSpecificDie(count: totalD12s, sides: 12, into: &d12Rolls)
-        rollSpecificDie(count: totalD20s, sides: 20, into: &d20Rolls)
-        rollSpecificDie(count: totalD100s, sides: 100, into: &d100Rolls)
+        for i in diceData.indices {
+            let sides = diceData[i].sides
+            let count = diceData[i].count
+            
+            let newRolls = (0..<count).map { _ in Int.random(in: 1...sides) }
+            diceData[i].rolls = newRolls
+        }
         
         diceRolled = true
-    }
-
-    private func rollSpecificDie(count: Int, sides: Int, into rolls: inout [Int]) {
-        rolls.removeAll()
-        if count > 0 {
-            for _ in 1...count {
-                rolls.append(Int.random(in: 1...sides))
-            }
-        }
     }
 }
 
 #Preview {
     ContentView()
 }
-
-
-
