@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var diceRolled: Bool = false
+    private let range: ClosedRange<Int> = 0...5
+    
     @State private var totalD4s: Int = 0
     @State private var totalD6s: Int = 0
     @State private var totalD8s: Int = 0
@@ -16,7 +18,6 @@ struct ContentView: View {
     @State private var totalD12s: Int = 0
     @State private var totalD20s: Int = 0
     @State private var totalD100s: Int = 0
-    private let range: ClosedRange<Int> = 0...5
     
     @State private var d4Rolls: [Int] = []
     @State private var d6Rolls: [Int] = []
@@ -28,6 +29,7 @@ struct ContentView: View {
     private var total: Int {
         d4Rolls.reduce(0, +) + d6Rolls.reduce(0, +) + d8Rolls.reduce(0, +) + d10Rolls.reduce(0, +) + d12Rolls.reduce(0, +) + d20Rolls.reduce(0, +) + d100Rolls.reduce(0, +)
     }
+    @State private var savedTotal: Int = 0
     
     var body: some View {
         NavigationStack {
@@ -41,13 +43,22 @@ struct ContentView: View {
                 DiceView(number: 100, totalDice: $totalD100s, range: range, diceRolls: $d100Rolls, diceRolled: $diceRolled)
                 
                 HStack {
-                    Button("ROLL", action: rollDice)
+                    Button {
+                        Task {
+                            await rollDice()
+                        }
+                    } label: {
+                        Text("ROLL")
                         .frame(width: 120, height: 40)
                         .background(Color.blue)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .fontWeight(.heavy)
                         .foregroundStyle(.white)
                         .padding(.trailing, 56)
+                    }
+                    .sensoryFeedback(.impact(weight: .heavy, intensity: 1), trigger: total)
+
+                    
                     Text("Total: ")
                         .font(.title)
                         .frame(width: 70)
@@ -66,51 +77,36 @@ struct ContentView: View {
         }
     }
     
-    func rollDice() {
-        d4Rolls.removeAll()
-        d6Rolls.removeAll()
-        d8Rolls.removeAll()
-        d10Rolls.removeAll()
-        d12Rolls.removeAll()
-        d20Rolls.removeAll()
-        d100Rolls.removeAll()
+    private func rollDice() async {
+        let delays: [Double] = [0.02, 0.04, 0.06, 0.08, 0.1, 0.15, 0.2, 0.3, 0.5]
+
+        setDiceRolls()
+        for delay in delays {
+            try? await Task.sleep(for: .seconds(delay))
+            setDiceRolls()
+        }
+        savedTotal = total
+    }
+    
+    private func setDiceRolls() {
+        rollSpecificDie(count: totalD4s, sides: 4, into: &d4Rolls)
+        rollSpecificDie(count: totalD6s, sides: 6, into: &d6Rolls)
+        rollSpecificDie(count: totalD8s, sides: 8, into: &d8Rolls)
+        rollSpecificDie(count: totalD10s, sides: 10, into: &d10Rolls)
+        rollSpecificDie(count: totalD12s, sides: 12, into: &d12Rolls)
+        rollSpecificDie(count: totalD20s, sides: 20, into: &d20Rolls)
+        rollSpecificDie(count: totalD100s, sides: 100, into: &d100Rolls)
         
-        if self.totalD4s > 0 {
-            for _ in 1...self.totalD4s {
-                d4Rolls.append(Int.random(in: 1...4))
-            }
-        }
-        if self.totalD6s > 0 {
-            for _ in 1...self.totalD6s {
-                d6Rolls.append(Int.random(in: 1...6))
-            }
-        }
-        if self.totalD8s > 0 {
-            for _ in 1...self.totalD8s {
-                d8Rolls.append(Int.random(in: 1...8))
-            }
-        }
-        if self.totalD10s > 0 {
-            for _ in 1...self.totalD10s {
-                d10Rolls.append(Int.random(in: 1...10))
-            }
-        }
-        if self.totalD12s > 0 {
-            for _ in 1...self.totalD12s {
-                d12Rolls.append(Int.random(in: 1...12))
-            }
-        }
-        if self.totalD20s > 0 {
-            for _ in 1...self.totalD20s {
-                d20Rolls.append(Int.random(in: 1...20))
-            }
-        }
-        if self.totalD100s > 0 {
-            for _ in 1...self.totalD100s {
-                d100Rolls.append(Int.random(in: 1...100))
-            }
-        }
         diceRolled = true
+    }
+
+    private func rollSpecificDie(count: Int, sides: Int, into rolls: inout [Int]) {
+        rolls.removeAll()
+        if count > 0 {
+            for _ in 1...count {
+                rolls.append(Int.random(in: 1...sides))
+            }
+        }
     }
 }
 

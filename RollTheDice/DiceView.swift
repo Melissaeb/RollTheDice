@@ -40,6 +40,7 @@ struct DiceView: View {
                             .background(Color.secondary.opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
+                    .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: totalDice)
                     Button {
                         if totalDice > range.lowerBound {
                             totalDice -= 1
@@ -54,6 +55,7 @@ struct DiceView: View {
                             .background(Color.secondary.opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
+                    .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: totalDice)
                 }
             }
             .padding(.leading)
