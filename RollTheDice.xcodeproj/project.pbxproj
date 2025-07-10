@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		97C3B3462E1F973900CC9AB6 /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C3B3452E1F973900CC9AB6 /* DiceView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		97C3B32B2E1C517100CC9AB6 /* RollTheDice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RollTheDice.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97C3B3452E1F973900CC9AB6 /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -34,6 +39,7 @@
 			children = (
 				97C3B32D2E1C517100CC9AB6 /* RollTheDice */,
 				97C3B32C2E1C517100CC9AB6 /* Products */,
+				97C3B3452E1F973900CC9AB6 /* DiceView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97C3B3462E1F973900CC9AB6 /* DiceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
